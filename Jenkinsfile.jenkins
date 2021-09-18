@@ -25,7 +25,7 @@ pipeline  {
             steps {
                 echo 'Creating docker image ...'
                 dir('.'){
-                    sh "docker build -t stanislav437/testsite . "
+                    sh "docker build -t maxim228/site . "
                 }
            }
         }
@@ -43,7 +43,7 @@ pipeline  {
             steps {
                 echo " ============== pushing image =================="
                 sh '''
-                docker push stanislav437/testsite
+                docker push maxim228/site
                 '''
             }
         }
