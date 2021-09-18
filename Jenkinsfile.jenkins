@@ -11,42 +11,42 @@ pipeline  {
         timestamps()
     }
     stages {
-        stage("Print hello"){
+        //stage("Print hello"){
+            //steps {
+             //   sh '''
+                 //   echo "Hello world!";
+                 //   cat /etc/os-release
+                 //   df -h
+               // '''
+            //    
+           // }
+       // }
+        stage("Create docker image") {
             steps {
-                sh '''
-                    echo "Hello world!";
-                    cat /etc/os-release
-                    df -h
-                '''
-                
+                echo 'Creating docker image ...'
+                dir('.'){
+                    sh "docker build -t stanislav437/testsite . "
+                }
+           }
+        }
+        stage("docker login") {
+           steps {
+               echo " ============== docker login =================="
+                withCredentials([usernamePassword(credentialsId: 'DockerHub-Credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                    docker login -u $USERNAME -p $PASSWORD
+                   '''
+                }
             }
         }
-       stage("Create docker image") {
-           steps {
-               echo 'Creating docker image ...'
-               dir('.'){
-                   sh "docker build -t macnaer/testsite . "
-               }
-          }
-       }
-  //      stage("docker login") {
- //           steps {
- //               echo " ============== docker login =================="
- //               withCredentials([usernamePassword(credentialsId: 'DockerHub-Credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-//                    sh '''
- //                   docker login -u $USERNAME -p $PASSWORD
-//                   '''
-//                }
- //           }
-//        }
-//        stage("docker push") {
-//            steps {
- //               echo " ============== pushing image =================="
- //               sh '''
- //               docker push macnaer/chatterboxserver:latest
- //               '''
-  //          }
- //       }
+        stage("docker push") {
+            steps {
+                echo " ============== pushing image =================="
+                sh '''
+                docker push stanislav437/testsite
+                '''
+            }
+        }
  //       stage("docker stop") {
  //           steps {
  //               echo " ============== stoping all images =================="
